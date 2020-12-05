@@ -22,7 +22,7 @@ def get_word():
     r = randint(1, 7732)
     count = 0
     with open(r'C:\Users\dim5x\PycharmProjects\untitled1\word_rus_8_tolk_c.txt', 'r', encoding='cp1251') as f:
-        # with open(r'/home/dim5x/mysite/word_rus_8_tolk.txt', 'r', encoding='cp1251') as f:
+        # with open(r'/home/dim5x/mysite/word_rus_8_tolk_c.txt', 'r', encoding='cp1251') as f:
         for row in f:
             count += 1
             if r == count:

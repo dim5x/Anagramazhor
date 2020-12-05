@@ -51,9 +51,15 @@
 
         {{ tolk|safe }}
 
-        Elapsed time: {{ g.request_time() }}
+        <footer class="page-footer font-small blue fixed-bottom">
+            <div class="footer-copyright text-center py-3">
+                Elapsed time: {{ g.request_time() }}
+            </div>
+        </footer>
 
     </div>
     </body>
+
+
 
 {% endblock %}
