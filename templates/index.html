@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+    <title>Анаграммажёр</title>
+    <META HTTP-EQUIV="REFRESH" CONTENT="60">
+
+    <head>
+        <link rel="stylesheet" type="text/css" href="../static/index.css">
+        <script type="text/javascript">
+            function startTimer() {
+                var my_timer = document.getElementById("my_timer");
+                var time = my_timer.innerHTML;
+                var arr = time.split(":");
+                var h = arr[0];
+                var m = arr[1];
+                var s = arr[2];
+                if (s == 0) {
+                    if (m == 0) {
+                        if (h == 0) {
+                            alert("Время вышло");
+                            window.location.reload();
+                            return;
+                        }
+                        h--;
+                        m = 60;
+                        if (h < 10) h = "0" + h;
+                    }
+                    m--;
+                    if (m < 10) m = "0" + m;
+                    s = 59;
+                } else s--;
+                if (s < 10) s = "0" + s;
+                document.getElementById("my_timer").innerHTML = h + ":" + m + ":" + s;
+                setTimeout(startTimer, 1000);
+            }
+        </script>
+    </head>
+
+    <body onload="startTimer()">
+    <span id="my_timer" style="color:#DC143C; font-weight: bold;">00:01:00</span>
+
+    <div class="container mt-5">
+        <form method="post">
+            <input name="word_field" type="text" style='border: 0px;' value=' {{ shuffle_word }}'/>
+            <input class="button" name="btn" id="1" type="submit" value="С т а р т"/>
+        </form>
+
+        <form method="post">
+            <input name="check_field" type="text"/>
+            <input class="button" name="btn" id="2" type="submit" value="Проверка"/>
+        </form>
+
+        {{ tolk|safe }}
+
+        Elapsed time: {{ g.request_time() }}
+
+    </div>
+    </body>
+
+{% endblock %}
