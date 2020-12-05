@@ -40,13 +40,13 @@
 
     <div class="container mt-5">
         <form method="post">
-            <input name="word_field" type="text" style='border: 0px;' value=' {{ shuffle_word }}'/>
-            <input class="button" name="btn" id="1" type="submit" value="С т а р т"/>
+            <input name="word_field" type="text" style='border: 0px;' value=' {{ shuffle_word }}'>
+            <input class="button" name="btn" id="1" type="submit" value="С т а р т">
         </form>
 
         <form method="post">
-            <input name="check_field" type="text"/>
-            <input class="button" name="btn" id="2" type="submit" value="Проверка"/>
+            <input name="check_field" type="text" autofocus>
+            <input class="button" name="btn" id="2" type="submit" value="Проверка">
         </form>
 
         {{ tolk|safe }}
