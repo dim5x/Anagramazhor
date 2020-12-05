@@ -1,4 +1,3 @@
-# Anagramazhor
 Тренажёр по расшифровке анаграмм.<br>
 http://dim5x.pythonanywhere.com/ <br>
 
