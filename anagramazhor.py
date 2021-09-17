@@ -1,13 +1,12 @@
 from random import randint, shuffle, seed
-from flask import Flask, render_template, request, g, make_response, session
+from flask import Flask, render_template, request, g
 import time
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'you-will-never-guess'
 
-
-# word = ''
-# tolk = ''
+word = ''
+tolk = ''
 
 
 @app.before_request
@@ -20,21 +19,21 @@ def get_word():
     """ Если не указан инициализатор, будет использован механизм генерации, предоставляемый ОС.
     Если такой механизм недоступен, используется текущее системное время."""
     seed()
-    r = randint(0, 7732)
+    r = randint(1, 7732)
     count = 0
-    # with open(r'C:\Users\dim5x\PycharmProjects\Anagramazhor\word_rus_8_tolk_cM3.txt', 'r', encoding='cp1251') as f:
-    # with open('word_rus_8_tolk_c.txt', 'r', encoding='cp1251') as f:
-    with open(r'/home/dim5x/mysite/word_rus_8_tolk_cM3.txt', 'r', encoding='cp1251') as f:
+    #with open(r'C:\Users\dim5x\PycharmProjects\untitled1\word_rus_8_tolk_c.txt', 'r', encoding='cp1251') as f:
+    with open('word_rus_8_tolk_c.txt', 'r', encoding='cp1251') as f:
+        # with open(r'/home/dim5x/mysite/word_rus_8_tolk_c.txt', 'r', encoding='cp1251') as f:
         for row in f:
             count += 1
             if r == count:
-                word, tolk = row.split('^')
+                word, tolk = row.split('***')
 
     return word.upper().strip(), tolk
 
 
-def get_shuffle_word(s):
-    sh = list(s)
+def get_sh_word(s):
+    sh = list(s.strip())
     while True:
         shuffle(sh)
         if sh != list(s):
@@ -47,29 +46,27 @@ def get_shuffle_word(s):
 def hello_world():
     global word
     global tolk
-
     if request.method == 'POST':
         if request.form['btn'] == "С т а р т":
             word, tolk = get_word()
-            shuffle_word = get_shuffle_word(word)
-            session['word'] = word
-            # res = make_response(render_template('index.html', shuffle_word=shuffle_word, word=word))
-            # res.set_cookie(key='word', value=word)
-            return render_template('anagramazhor.html', shuffle_word=shuffle_word, word=word)
+            if 'искомое слово отсутствует' in tolk:
+                tolk = ''
+            shuffle_word = get_sh_word(word)
+
+            return render_template('index.html', word=word, shuffle_word=shuffle_word)
 
         elif request.form['btn'] == 'Проверка':
             answer = request.form['check_field'].upper()
-            word = session['word']
             if answer == word:
                 shuffle_word = "Правильно!"
             else:
                 shuffle_word = "Нет! " + word
 
-            return render_template('anagramazhor.html', shuffle_word=shuffle_word, tolk=tolk)
+            return render_template('index.html', shuffle_word=shuffle_word, tolk=tolk)
     else:
 
-        return render_template('anagramazhor.html')
+        return render_template('index.html')
 
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)
