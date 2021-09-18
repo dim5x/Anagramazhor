@@ -7,14 +7,16 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'you-will-never-guess'
 
 LIST_OF_WORDS = []
+PATH_TO_FILE = r'C:\Users\dim5x\PycharmProjects\Anagramazhor\word_rus_8_tolk_cM3.txt'
+# PATH_TO_FILE = r'/home/dim5x/mysite/word_rus_8_tolk_cM3.txt'
+ENCODING = 'cp1251'
 
 
 @app.before_request
 def before_request():
     global LIST_OF_WORDS
     g.request_start_time = time.time()
-    with open(r'C:\Users\dim5x\PycharmProjects\Anagramazhor\word_rus_8_tolk_cM3.txt', 'r', encoding='cp1251') as f:
-        # with open(r'/home/dim5x/mysite/word_rus_8_tolk_cM3.txt', 'r', encoding='cp1251') as f:
+    with open(PATH_TO_FILE, 'r', encoding=ENCODING) as f:
         for string in f:
             LIST_OF_WORDS.append(string)
     g.request_time = lambda: "%.5fs" % (time.time() - g.request_start_time)
