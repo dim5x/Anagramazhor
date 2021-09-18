@@ -47,7 +47,7 @@ def get_shuffle_word(s: str) -> str:
 
 
 # def find_answer(answer: str) -> bool:
-#     """"""
+#     """О"""
 #     for string in LIST_OF_WORDS:
 #         if string.split('^')[0] == answer:
 #             return True
