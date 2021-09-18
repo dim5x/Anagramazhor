@@ -1,10 +1,11 @@
+import os
 import time
 from random import randint, shuffle, seed
 
 from flask import Flask, render_template, request, g, session
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'you-will-never-guess'
+app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 
 LIST_OF_WORDS = []
 PATH_TO_FILE = r'C:\Users\dim5x\PycharmProjects\Anagramazhor\word_rus_8_tolk_cM3.txt'
