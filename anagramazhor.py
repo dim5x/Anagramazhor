@@ -1,14 +1,11 @@
-import os
-import sys
 import time
-from random import randint, shuffle, seed
-from flask_frozen import Freezer
-from flask import Flask, render_template, request, g, session
+from random import randint, seed, shuffle
+from flask import Flask, g, render_template, request, session
 
 app = Flask(__name__)
 # app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 app.config['SECRET_KEY'] = 'SECRET_KEY'
-freezer = Freezer(app)
+
 LIST_OF_WORDS = []
 PATH_TO_FILE = r'C:\Users\dim5x\PycharmProjects\Anagramazhor\word_rus_8_tolk_cM3.txt'
 # PATH_TO_FILE = r'/home/dim5x/mysite/word_rus_8_tolk_cM3.txt'
@@ -22,7 +19,7 @@ def before_request():
     with open(PATH_TO_FILE, 'r', encoding=ENCODING) as f:
         for string in f:
             LIST_OF_WORDS.append(string)
-    g.request_time = lambda: "%.5fs" % (time.time() - g.request_start_time)
+    g.request_time = lambda: f'{(time.time() - g.request_start_time):.2f}'
 
 
 def get_word(list_of_words: list) -> tuple:
@@ -34,8 +31,8 @@ def get_word(list_of_words: list) -> tuple:
     """
     seed()
     random_string = randint(0, 7732)
-    word, tolk = list_of_words[random_string].split('^')
-    return word, tolk
+    word, description = list_of_words[random_string].split('^')
+    return word, description
 
 
 def get_shuffle_word(s: str) -> str:
@@ -48,42 +45,32 @@ def get_shuffle_word(s: str) -> str:
     return '  '.join(sh).upper()
 
 
-# def find_answer(answer: str) -> bool:
-#     """О"""
-#     for string in LIST_OF_WORDS:
-#         if string.split('^')[0] == answer:
-#             return True
-#     return False
-
-
 @app.route('/', methods=['POST', 'GET'])
 def anagramazhor():
-    palindrom = ''
+    palindrome = ''
     if request.method == 'POST':
 
         if request.form['btn'] == "С т а р т":
-            session['word'], session['tolk'] = get_word(LIST_OF_WORDS)
+            session['word'], session['description'] = get_word(LIST_OF_WORDS)
             shuffle_word = get_shuffle_word(session['word'])
             return render_template('anagramazhor.html', shuffle_word=shuffle_word)
 
         elif request.form['btn'] == 'Проверка':
             answer = request.form['check_field'].upper()
-            word = session['word']
+            word = session['word'].upper()
             if answer == word:
                 shuffle_word = "Правильно!"
             else:
                 if set(word).issubset(answer):
                     shuffle_word = 'Да!'
-                    palindrom = 'А ещё это может быть: ' + word + '<br>'
+                    palindrome = 'А ещё это может быть: ' + word + '<br>'
                 else:
                     shuffle_word = "Нет! " + word.upper()
-            return render_template('anagramazhor.html', shuffle_word=shuffle_word, tolk=palindrom + session['tolk'])
+            return render_template('anagramazhor.html',
+                                   shuffle_word=shuffle_word, description=palindrome + session['description'])
     else:
         return render_template('anagramazhor.html')
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1 and sys.argv[1] == "build":
-        freezer.freeze()
-    else:
-        app.run(debug=False)
+    app.run(debug=False)
