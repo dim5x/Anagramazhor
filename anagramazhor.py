@@ -11,13 +11,15 @@ app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 DICT_OF_WORDS = {}
 ENCODING = 'cp1251'
 PATH_TO_FILE = r'C:\Users\dim5x\PycharmProjects\Anagramazhor\word_rus_8_tolk_cM3.txt'
-
-
 # PATH_TO_FILE = r'/home/dim5x/mysite/word_rus_8_tolk_cM3.txt'
 
 
 @app.before_request
 def before_request():
+    """
+    Считываем в словарь данные из файла. Формат: dict[слово] = описание слова.
+    Записываем в g время исполнения.
+    """
     g.request_start_time = time.time()
     with open(PATH_TO_FILE, 'r', encoding=ENCODING) as file:
         for string in file:
@@ -50,6 +52,11 @@ def get_shuffle_word(s: str) -> str:
 
 @app.route('/', methods=['POST', 'GET'])
 def anagramazhor():
+    """
+    Основная функция.
+
+    Генерирует слова, записывает в сессию, предоставляет шаблону, проверяет ответ.
+    """
     description = ''
     if request.method == 'POST':
 
