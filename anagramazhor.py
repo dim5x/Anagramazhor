@@ -11,6 +11,8 @@ app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 DICT_OF_WORDS = {}
 ENCODING = 'cp1251'
 PATH_TO_FILE = r'C:\Users\dim5x\PycharmProjects\Anagramazhor\word_rus_8_tolk_cM3.txt'
+
+
 # PATH_TO_FILE = r'/home/dim5x/mysite/word_rus_8_tolk_cM3.txt'
 
 
@@ -32,7 +34,7 @@ def get_word() -> tuple:
     Если такой механизм недоступен, используется текущее системное время.
     """
     seed()
-    word, description = random.choice(list(DICT_OF_WORDS.items()))
+    word, description = random.choice(list(DICT_OF_WORDS.items()))  # nosec
     return word, description
 
 
