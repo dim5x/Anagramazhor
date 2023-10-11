@@ -1,5 +1,4 @@
 import os
-import random
 import time
 from random import seed, shuffle
 from flask import Flask, g, render_template, request, session
