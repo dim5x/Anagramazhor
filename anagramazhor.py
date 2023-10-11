@@ -1,15 +1,15 @@
+import os
 import time
 from random import randint, seed, shuffle
 from flask import Flask, g, render_template, request, session
 
 app = Flask(__name__)
-# app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
-app.config['SECRET_KEY'] = 'SECRET_KEY'
+app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 
 LIST_OF_WORDS = []
+ENCODING = 'cp1251'
 PATH_TO_FILE = r'C:\Users\dim5x\PycharmProjects\Anagramazhor\word_rus_8_tolk_cM3.txt'
 # PATH_TO_FILE = r'/home/dim5x/mysite/word_rus_8_tolk_cM3.txt'
-ENCODING = 'cp1251'
 
 
 @app.before_request
