@@ -1,12 +1,14 @@
 import os
+import sys
 import time
 from random import randint, shuffle, seed
-
+from flask_frozen import Freezer
 from flask import Flask, render_template, request, g, session
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
-
+# app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
+app.config['SECRET_KEY'] = 'SECRET_KEY'
+freezer = Freezer(app)
 LIST_OF_WORDS = []
 PATH_TO_FILE = r'C:\Users\dim5x\PycharmProjects\Anagramazhor\word_rus_8_tolk_cM3.txt'
 # PATH_TO_FILE = r'/home/dim5x/mysite/word_rus_8_tolk_cM3.txt'
@@ -81,4 +83,7 @@ def anagramazhor():
 
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    if len(sys.argv) > 1 and sys.argv[1] == "build":
+        freezer.freeze()
+    else:
+        app.run(debug=False)
