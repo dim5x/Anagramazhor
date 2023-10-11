@@ -14,7 +14,7 @@ PATH_TO_FILE = r'C:\Users\dim5x\PycharmProjects\Anagramazhor\word_rus_8_tolk_cM3
 
 @app.before_request
 def before_request():
-    global LIST_OF_WORDS
+    # global LIST_OF_WORDS
     g.request_start_time = time.time()
     with open(PATH_TO_FILE, 'r', encoding=ENCODING) as f:
         for string in f:
