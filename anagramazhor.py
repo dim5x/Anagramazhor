@@ -1,12 +1,14 @@
 import os
+import random
 import time
-from random import randint, seed, shuffle
+from random import seed, shuffle
 from flask import Flask, g, render_template, request, session
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
+# app.config['SECRET_KEY'] = 'SECRET_KEY'
 
-LIST_OF_WORDS = []
+DICT_OF_WORDS = {}
 ENCODING = 'cp1251'
 PATH_TO_FILE = r'C:\Users\dim5x\PycharmProjects\Anagramazhor\word_rus_8_tolk_cM3.txt'
 # PATH_TO_FILE = r'/home/dim5x/mysite/word_rus_8_tolk_cM3.txt'
@@ -14,15 +16,15 @@ PATH_TO_FILE = r'C:\Users\dim5x\PycharmProjects\Anagramazhor\word_rus_8_tolk_cM3
 
 @app.before_request
 def before_request():
-    # global LIST_OF_WORDS
     g.request_start_time = time.time()
-    with open(PATH_TO_FILE, 'r', encoding=ENCODING) as f:
-        for string in f:
-            LIST_OF_WORDS.append(string)
+    with open(PATH_TO_FILE, 'r', encoding=ENCODING) as file:
+        for string in file:
+            word, description = string.split('^')
+            DICT_OF_WORDS[word] = description
     g.request_time = lambda: f'{(time.time() - g.request_start_time):.2f}'
 
 
-def get_word(list_of_words: list) -> tuple:
+def get_word() -> tuple:
     """
     Получить слово из словаря.
 
@@ -30,8 +32,7 @@ def get_word(list_of_words: list) -> tuple:
     Если такой механизм недоступен, используется текущее системное время.
     """
     seed()
-    random_string = randint(0, 7732)
-    word, description = list_of_words[random_string].split('^')
+    word, description = random.choice(list(DICT_OF_WORDS.items()))
     return word, description
 
 
@@ -47,11 +48,11 @@ def get_shuffle_word(s: str) -> str:
 
 @app.route('/', methods=['POST', 'GET'])
 def anagramazhor():
-    palindrome = ''
+    description = ''
     if request.method == 'POST':
 
         if request.form['btn'] == "С т а р т":
-            session['word'], session['description'] = get_word(LIST_OF_WORDS)
+            session['word'], session['description'] = get_word()
             shuffle_word = get_shuffle_word(session['word'])
             return render_template('anagramazhor.html', shuffle_word=shuffle_word)
 
@@ -60,14 +61,17 @@ def anagramazhor():
             word = session['word'].upper()
             if answer == word:
                 shuffle_word = "Правильно!"
+                description = session['description']
             else:
-                if set(word).issubset(answer):
+                if sorted(word) == sorted(answer) and answer in DICT_OF_WORDS:
                     shuffle_word = 'Да!'
-                    palindrome = 'А ещё это может быть: ' + word + '<br>'
+                    palindrome = f"А ещё это может быть: {word}  <br> {session['description']}"
+                    description = f'{DICT_OF_WORDS[answer]} <br> {palindrome}'
                 else:
                     shuffle_word = "Нет! " + word.upper()
+                    description = session['description']
             return render_template('anagramazhor.html',
-                                   shuffle_word=shuffle_word, description=palindrome + session['description'])
+                                   shuffle_word=shuffle_word, description=description)
     else:
         return render_template('anagramazhor.html')
 
