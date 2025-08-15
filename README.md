@@ -27,7 +27,7 @@
    ```bash
    git clone https://github.com/dim5x/Anagramazhor.git
    ```
-   
+
 2. Установите зависимости:
 
    ```bash
