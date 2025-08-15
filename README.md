@@ -23,16 +23,18 @@
 ### Установка
 
 1. Клонируйте репозиторий:
+
    ```bash
    git clone https://github.com/dim5x/Anagramazhor.git
    ```
 2. Установите зависимости:
+
    ```bash
    pip install -r requirements.txt
    ```
 
 ### Запуск
 
-```bash
-python app.py
-```
+   ```bash
+  python app.py
+   ```
